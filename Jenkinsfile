@@ -25,14 +25,12 @@ pipeline {
       }
     }
         
-    // Building Docker images
-    stage('Building image') {
-      steps{
-        script {
-          dockerImage = docker build -t "${IMAGE_REPO_NAME}:${IMAGE_TAG}" .
-        }
+    // Build the Docker image from the Dockerfile in "WebUi" directory
+      stage('Docker build') {
+     // dir('WebUI') {
+        sh "docker build --no-cache -t ${env.IMAGE_REPO_NAME}:${IMAGE_TAG} ."
+      //}
       }
-    }
    
     // Uploading Docker images into AWS ECR
     stage('Pushing to ECR') {
