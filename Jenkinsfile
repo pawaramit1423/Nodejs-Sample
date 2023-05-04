@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        AWS_ACCOUNT_ID="176295807911"
+        AWS_ACCOUNT_ID="tbcommerce"
         AWS_DEFAULT_REGION="us-east-1" 
 	CLUSTER_NAME="Nodejs"
 	SERVICE_NAME="nodejsapp-service"
