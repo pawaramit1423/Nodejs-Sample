@@ -10,7 +10,7 @@ pipeline {
         IMAGE_REPO_NAME="nodejs"
         IMAGE_TAG="${env.BUILD_ID}"
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
-// 	registryCredential = "tbcommerce"
+	registryCredential = "176295807911"
     }
    
     stages {
@@ -49,20 +49,16 @@ pipeline {
         }
     }
 
-    stage("Update ECS service") {
-        steps {
-            withCredentials([
-                [
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
-                    credentialsId: '176295807911'
-                ]
-            ]) {
-                sh "aws ecs update-service --cluster ${env.CLUSTER_NAME} --service ${env.SERVICE_NAME} --force-new-deployment --image ${env.IMAGE_REPO_NAME}:${env.IMAGE_TAG}"
-            }
+    stage('Deploy') {
+     steps{
+            withAWS(credentials: registryCredential, region: "${AWS_DEFAULT_REGION}") {
+                script {
+			sh './script.sh'
+                }
+            } 
         }
+      }      
+      
     }
-}
 }
 
