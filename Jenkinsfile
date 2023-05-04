@@ -43,7 +43,7 @@ pipeline {
                 ]
             ]) {
                 sh "aws ecr get-login-password --region ${env.AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_DEFAULT_REGION}.amazonaws.com"
-                sh "docker push ${env.IMAGE_REPO_NAME}:${env.BUILD_ID}"
+                sh "docker push ${env.IMAGE_REPO_NAME}:${env.IMAGE_TAG}"
             }
         }
     }
@@ -58,7 +58,7 @@ pipeline {
                     credentialsId: '176295807911'
                 ]
             ]) {
-                sh "aws ecs update-service --cluster ${env.ECS_CLUSTER} --service ${env.ECS_SERVICE} --force-new-deployment --image ${env.DOCKER_IMAGE}:${env.BUILD_NUMBER}"
+                sh "aws ecs update-service --cluster ${env.CLUSTER_NAME} --service ${env.SERVICE_NAME} --force-new-deployment --image ${env.IMAGE_REPO_NAME}:${env.IMAGE_TAG}"
             }
         }
     }
